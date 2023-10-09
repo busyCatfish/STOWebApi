@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "9yGK0f8tOhcwfkoDNEPC5DQItJBiZyBI9b4xvm7DtQw=",
+  "Source": "STOWebApi",
+  "BasePath": "_content/STOWebApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
