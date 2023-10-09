@@ -9,7 +9,7 @@ namespace STOWebApi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class CarsController : Controller
+	public class CarsController : ControllerBase
 	{
 		private readonly ICarService _carService;
 
@@ -21,7 +21,7 @@ namespace STOWebApi.Controllers
 
 		// GET: api/cars
 		[HttpGet]
-		public async Task<IActionResult> GetAllAsync()
+		public async Task<ActionResult<IEnumerable<CarModel>>> GetAllAsync()
 		{
 			IEnumerable<CarModel> cars = await _carService.GetAllAsync();
 
@@ -30,13 +30,13 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(cars);
+			return Ok(cars);
 		}
 
 		//GET: api/cars/1HGCM82633A123456
 		[HttpGet]
 		[Route("{vincode}")]
-		public async Task<IActionResult> GetById(string vincode)
+		public async Task<ActionResult<CarModel>> GetById(string vincode)
 		{
 			CarModel car = await _carService.GetByIdAsync(vincode);
 
@@ -45,13 +45,13 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(car);
+			return Ok(car);
 		}
 
 		//GET: api/cars/filter?userId=UserId
 		[HttpGet]
 		[Route("filter")]
-		public async Task<IActionResult> GetByRollAsync([FromQuery] int userId)
+		public async Task<ActionResult<IEnumerable<CarModel>>> GetByRollAsync([FromQuery] int userId)
 		{
 			IEnumerable<CarModel> cars = await _carService.GetCarsByUserIdAsync(userId);
 
@@ -60,16 +60,16 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(cars);
+			return Ok(cars);
 		}
 
 		// POST: api/cars
 		[HttpPost]
-		public async Task<IActionResult> Add([FromBody] CarRegistrationModel car)
+		public async Task<ActionResult> Add([FromBody] CarRegistrationModel car)
 		{
 			await _carService.AddAsync(car);
 
-			return View("Added");
+			return Ok();
 		}
 
 		// PUT: api/cars/1HGCM82633A123456
@@ -77,7 +77,7 @@ namespace STOWebApi.Controllers
 		[HttpPatch]
 		[HttpPut]
 		[Route("{vincode}")]
-		public async Task<IActionResult> Update(string vincode, [FromBody] CarModel updateCar)
+		public async Task<ActionResult> Update(string vincode, [FromBody] CarModel updateCar)
 		{
 			if (vincode != updateCar.Vincode)
 			{
@@ -86,17 +86,17 @@ namespace STOWebApi.Controllers
 
 			await _carService.UpdateAsync(updateCar);
 
-			return View("Updated");
+			return Ok();
 		}
 
 		// DELETE: api/cars/1HGCM82633A123456
 		[HttpDelete]
 		[Route("{vincode}")]
-		public async Task<IActionResult> Delete(string vincode)
+		public async Task<ActionResult> Delete(string vincode)
 		{
 			await _carService.DeleteByIdAsync(vincode);
 
-			return View("Deleted");
+			return Ok();
 		}
 	}
 }

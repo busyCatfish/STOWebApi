@@ -9,7 +9,7 @@ namespace STOWebApi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class OrdersController : Controller
+	public class OrdersController : ControllerBase
 	{
 		private readonly IOrderService _orderService;
 
@@ -21,7 +21,7 @@ namespace STOWebApi.Controllers
 
 		// GET: api/orders
 		[HttpGet]
-		public async Task<IActionResult> GetAllAsync()
+		public async Task<ActionResult<IEnumerable<OrderModel>>> GetAllAsync()
 		{
 			IEnumerable<OrderModel> orders = await _orderService.GetAllAsync();
 
@@ -30,13 +30,13 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(orders);
+			return Ok(orders);
 		}
 
 		//GET: api/orders/1
 		[HttpGet]
 		[Route("{id}")]
-		public async Task<IActionResult> GetById(int id)
+		public async Task<ActionResult<OrderModel>> GetById(int id)
 		{
 			OrderModel order = await _orderService.GetByIdAsync(id);
 
@@ -45,13 +45,13 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(order);
+			return Ok(order);
 		}
 
 		//GET: api/orders/filter?state=YourStateEnumValue&сarVincode=YourCarVincode&userId=YourUserId&startDate=YourStartDate&finisheDate=YourFinisheDate
 		[HttpGet]
 		[Route("filter")]
-		public async Task<IActionResult> GetByRollAsync([FromQuery] OrderFilterSearchModel filter)
+		public async Task<ActionResult<IEnumerable<OrderModel>>> GetByRollAsync([FromQuery] OrderFilterSearchModel filter)
 		{
 			IEnumerable<OrderModel> orders = await _orderService.GetOrdersByFilterAsync(filter);
 
@@ -60,16 +60,16 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(orders);
+			return Ok(orders);
 		}
 
 		// POST: api/orders
 		[HttpPost]
-		public async Task<IActionResult> Add([FromBody] OrderRegistrationModel order)
+		public async Task<ActionResult> Add([FromBody] OrderRegistrationModel order)
 		{
 			await _orderService.AddAsync(order);
 
-			return View("Added");
+			return Ok();
 		}
 
 		// PUT: api/orders/1
@@ -77,7 +77,7 @@ namespace STOWebApi.Controllers
 		[HttpPatch]
 		[HttpPut]
 		[Route("{id}")]
-		public async Task<IActionResult> Update(int id, [FromBody] OrderModel updateOrder)
+		public async Task<ActionResult> Update(int id, [FromBody] OrderModel updateOrder)
 		{
 			if (id != updateOrder.OrderId)
 			{
@@ -86,17 +86,17 @@ namespace STOWebApi.Controllers
 
 			await _orderService.UpdateAsync(updateOrder);
 
-			return View("Updated");
+			return Ok();
 		}
 
 		// DELETE: api/orders/1
 		[HttpDelete]
 		[Route("{id}")]
-		public async Task<IActionResult> Delete(int id)
+		public async Task<ActionResult> Delete(int id)
 		{
 			await _orderService.DeleteByIdAsync(id);
 
-			return View("Deleted");
+			return Ok();
 		}
 	}
 }

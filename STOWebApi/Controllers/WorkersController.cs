@@ -9,7 +9,7 @@ namespace STOWebApi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class WorkersController : Controller
+	public class WorkersController : ControllerBase
 	{
 		private readonly IWorkerService _workerService;
 
@@ -21,7 +21,7 @@ namespace STOWebApi.Controllers
 
 		// GET: api/workers
 		[HttpGet]
-		public async Task<IActionResult> GetAllAsync()
+		public async Task<ActionResult<IEnumerable<WorkerModel>>> GetAllAsync()
 		{
 			IEnumerable<WorkerModel> workers = await _workerService.GetAllAsync();
 
@@ -30,13 +30,13 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(workers);
+			return Ok(workers);
 		}
 
 		//GET: api/workers/1
 		[HttpGet]
 		[Route("{id}")]
-		public async Task<IActionResult> GetById(int id)
+		public async Task<ActionResult<WorkerModel>> GetById(int id)
 		{
 			WorkerModel worker = await _workerService.GetByIdAsync(id);
 
@@ -45,13 +45,13 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(worker);
+			return Ok(worker);
 		}
 
 		//GET: api/workers/filter?position=YourPositionEnum
 		[HttpGet]
 		[Route("filter")]
-		public async Task<IActionResult> GetByRollAsync([FromQuery] PositionEnum position)
+		public async Task<ActionResult<IEnumerable<WorkerModel>>> GetByRollAsync([FromQuery] PositionEnum position)
 		{
 			IEnumerable<WorkerModel> workers = await _workerService.GetWorkersByPositionAsync(position);
 
@@ -60,16 +60,16 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(workers);
+			return Ok(workers);
 		}
 
 		// POST: api/workers
 		[HttpPost]
-		public async Task<IActionResult> Add([FromBody] WorkerRegistrationModel worker)
+		public async Task<ActionResult> Add([FromBody] WorkerRegistrationModel worker)
 		{
 			await _workerService.AddAsync(worker);
 
-			return View("Added");
+			return Ok();
 		}
 
 		// PUT: api/workers/1
@@ -77,7 +77,7 @@ namespace STOWebApi.Controllers
 		[HttpPatch]
 		[HttpPut]
 		[Route("{id}")]
-		public async Task<IActionResult> Update(int id, [FromBody] WorkerModel updateWorker)
+		public async Task<ActionResult> Update(int id, [FromBody] WorkerModel updateWorker)
 		{
 			if (id != updateWorker.WorkerId)
 			{
@@ -86,17 +86,17 @@ namespace STOWebApi.Controllers
 
 			await _workerService.UpdateAsync(updateWorker);
 
-			return View("Updated");
+			return Ok();
 		}
 
 		// DELETE: api/workers/1
 		[HttpDelete]
 		[Route("{id}")]
-		public async Task<IActionResult> Delete(int id)
+		public async Task<ActionResult> Delete(int id)
 		{
 			await _workerService.DeleteByIdAsync(id);
 
-			return View("Deleted");
+			return Ok();
 		}
 	}
 }

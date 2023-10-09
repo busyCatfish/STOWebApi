@@ -9,7 +9,7 @@ namespace STOWebApi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class ReportsController : Controller
+	public class ReportsController : ControllerBase
 	{
 		private readonly IReportService _reportService;
 
@@ -21,7 +21,7 @@ namespace STOWebApi.Controllers
 
 		//GET: api/reports?startDate=YourStartDate&finisheDate=YourFinisheDate
 		[HttpGet]
-		public async Task<IActionResult> GetByRollAsync([FromQuery] DateTime start, DateTime end)
+		public async Task<ActionResult<ReportModel>> GetByRollAsync([FromQuery] DateTime start, DateTime end)
 		{
 			ReportModel report = await _reportService.GenerateReportByPeriodAsync(start, end);
 
@@ -30,7 +30,7 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(report);
+			return Ok(report);
 		}
 
 	}

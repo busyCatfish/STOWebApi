@@ -9,7 +9,7 @@ namespace STOWebApi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class UsersController : Controller
+	public class UsersController : ControllerBase
 	{
 		private readonly IUserService _userService;
 
@@ -21,7 +21,7 @@ namespace STOWebApi.Controllers
 
 		// GET: api/users
 		[HttpGet]
-		public async Task<IActionResult> GetAllAsync()
+		public async Task<ActionResult<IEnumerable<UserModel>>> GetAllAsync()
 		{
 			IEnumerable<UserModel> users = await _userService.GetAllAsync();
 
@@ -30,13 +30,13 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(users);
+			return Ok(users);
 		}
 
 		//GET: api/users/1
 		[HttpGet]
 		[Route("{id}")]
-		public async Task<IActionResult> GetById(int id)
+		public async Task<ActionResult<UserModel>> GetById(int id)
 		{
 			UserModel user = await _userService.GetByIdAsync(id);
 
@@ -45,13 +45,13 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(user);
+			return Ok(user);
 		}
 
 		//GET: api/users/filter?role=YourRoleEnumValue
 		[HttpGet]
 		[Route("filter")]
-		public async Task<IActionResult> GetByRollAsync([FromQuery] RoleEnum role)
+		public async Task<ActionResult<IEnumerable<UserModel>>> GetByRollAsync([FromQuery] RoleEnum role)
 		{
 			IEnumerable<UserModel> users = await _userService.GetUsersByRollAsync(role);
 
@@ -60,16 +60,16 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(users);
+			return Ok(users);
 		}
 
 		// POST: api/users
 		[HttpPost]
-		public async Task<IActionResult> Add([FromBody] UserRegistrationModel user)
+		public async Task<ActionResult> Add([FromBody] UserRegistrationModel user)
 		{
 			await _userService.AddAsync(user);
 
-			return View("Added");
+			return Ok("Added");
 		}
 
 		// PUT: api/users/1
@@ -77,7 +77,7 @@ namespace STOWebApi.Controllers
 		[HttpPatch]
 		[HttpPut]
 		[Route("{id}")]
-		public async Task<IActionResult> Update(int id, [FromBody] UserModel updateUser)
+		public async Task<ActionResult> Update(int id, [FromBody] UserModel updateUser)
 		{
 			if (id != updateUser.UserId)
 			{
@@ -86,17 +86,17 @@ namespace STOWebApi.Controllers
 
 			await _userService.UpdateAsync(updateUser);
 
-			return View("Updated");
+			return Ok("Updated");
 		}
 
 		// DELETE: api/users/1
 		[HttpDelete]
 		[Route("{id}")]
-		public async Task<IActionResult> Delete(int id)
+		public async Task<ActionResult> Delete(int id)
 		{
 			await _userService.DeleteByIdAsync(id);
 
-			return View("Deleted");
+			return Ok("Deleted");
 		}
 	}
 }

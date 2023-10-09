@@ -44,7 +44,7 @@ namespace STOWebApi
 			builder.Services.AddCors(options =>
 			{
 				options.AddPolicy("AllowOrigin",
-					builder => builder.WithOrigins("http://localhost:4200") //  адресу React додатка
+					builder => builder.WithOrigins("http://localhost:5173") //  адресу React додатка
 					.AllowAnyHeader()
 					.AllowAnyMethod());
 			});

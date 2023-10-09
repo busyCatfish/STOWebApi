@@ -9,7 +9,7 @@ namespace STOWebApi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class MastersController : Controller
+	public class MastersController : ControllerBase
 	{
 		private readonly IMasterService _masterService;
 
@@ -21,7 +21,7 @@ namespace STOWebApi.Controllers
 
 		// GET: api/masters
 		[HttpGet]
-		public async Task<IActionResult> GetAllAsync()
+		public async Task<ActionResult<IEnumerable<MasterModel>>> GetAllAsync()
 		{
 			IEnumerable<MasterModel> masters = await _masterService.GetAllAsync();
 
@@ -30,13 +30,13 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(masters);
+			return Ok(masters);
 		}
 
 		//GET: api/masters/1
 		[HttpGet]
 		[Route("{id}")]
-		public async Task<IActionResult> GetById(int id)
+		public async Task<ActionResult<MasterModel>> GetById(int id)
 		{
 			MasterModel master = await _masterService.GetByIdAsync(id);
 
@@ -45,13 +45,13 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(master);
+			return Ok(master);
 		}
 
 		//GET: api/masters/filter?type=YourMasterTypeEnum
 		[HttpGet]
 		[Route("filter")]
-		public async Task<IActionResult> GetByRollAsync([FromQuery] MasterTypeEnum type)
+		public async Task<ActionResult<IEnumerable<MasterModel>>> GetByRollAsync([FromQuery] MasterTypeEnum type)
 		{
 			IEnumerable<MasterModel> masters = await _masterService.GetMastersByTypeAsync(type);
 
@@ -60,16 +60,16 @@ namespace STOWebApi.Controllers
 				return NotFound();
 			}
 
-			return View(masters);
+			return Ok(masters);
 		}
 
 		// POST: api/masters
 		[HttpPost]
-		public async Task<IActionResult> Add([FromBody] MasterRegistrationModel master)
+		public async Task<ActionResult> Add([FromBody] MasterRegistrationModel master)
 		{
 			await _masterService.AddAsync(master);
 
-			return View("Added");
+			return Ok();
 		}
 
 		// PUT: api/masters/1
@@ -77,7 +77,7 @@ namespace STOWebApi.Controllers
 		[HttpPatch]
 		[HttpPut]
 		[Route("{id}")]
-		public async Task<IActionResult> Update(int id, [FromBody] MasterModel updateMaster)
+		public async Task<ActionResult> Update(int id, [FromBody] MasterModel updateMaster)
 		{
 			if (id != updateMaster.MasterId)
 			{
@@ -86,17 +86,17 @@ namespace STOWebApi.Controllers
 
 			await _masterService.UpdateAsync(updateMaster);
 
-			return View("Updated");
+			return Ok();
 		}
 
 		// DELETE: api/masters/1
 		[HttpDelete]
 		[Route("{id}")]
-		public async Task<IActionResult> Delete(int id)
+		public async Task<ActionResult> Delete(int id)
 		{
 			await _masterService.DeleteByIdAsync(id);
 
-			return View("Deleted");
+			return Ok();
 		}
 	}
 }
