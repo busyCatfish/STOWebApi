@@ -67,6 +67,11 @@ namespace STOWebApi.Data.Repositories
 		{
 			User? user = await _dbContext.Users.FindAsync(id);
 
+			if (user != null)
+			{
+				_dbContext.Entry(user).State = EntityState.Detached;
+			}
+
 			return user;
 		}
 

@@ -9,8 +9,7 @@ namespace STOWebApi.Data.Entity
 		[MaxLength(17)]
 		public string Vincode { get; set; }
 
-		[Required]
-		public int UserId { get; set; }
+		public int? UserId { get; set; }
 
 		public User? User { get; set; }
 

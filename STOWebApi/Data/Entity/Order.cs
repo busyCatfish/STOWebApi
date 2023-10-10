@@ -8,8 +8,7 @@ namespace STOWebApi.Data.Entity
 		[Key]
 		public int Id { get; set; }
 
-		[Required]
-		public int UserId { get; set; }
+		public int? UserId { get; set; }
 
 		[Required]
 		public string? CarVincode { get; set; }

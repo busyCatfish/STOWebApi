@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using STOWebApi.Data;
 
@@ -11,9 +12,11 @@ using STOWebApi.Data;
 namespace STOWebApi.Migrations
 {
     [DbContext(typeof(STODbContext))]
-    partial class STODbContextModelSnapshot : ModelSnapshot
+    [Migration("20231010233839_AddNullPosForUserIdInCars")]
+    partial class AddNullPosForUserIdInCars
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +47,9 @@ namespace STOWebApi.Migrations
                         .HasColumnType("nvarchar(17)");
 
                     b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.HasKey("Vincode");
 
@@ -113,7 +118,7 @@ namespace STOWebApi.Migrations
                     b.Property<int>("State")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -227,7 +232,7 @@ namespace STOWebApi.Migrations
                     b.HasOne("STOWebApi.Data.Entity.User", "User")
                         .WithMany("Cars")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("User");
                 });
@@ -254,7 +259,8 @@ namespace STOWebApi.Migrations
                     b.HasOne("STOWebApi.Data.Entity.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Car");
 

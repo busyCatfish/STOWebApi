@@ -35,14 +35,14 @@ namespace STOWebApi.Data
 				.WithOne(e => e.User)
 				.HasForeignKey(e => e.UserId)
 				.HasPrincipalKey(e => e.Id)
-				.OnDelete(DeleteBehavior.NoAction);
+				.OnDelete(DeleteBehavior.SetNull);
 
 			modelBuilder.Entity<Order>()
 				.HasOne(e => e.User)
 				.WithMany(e => e.Orders)
 				.HasForeignKey(e => e.UserId)
 				.HasPrincipalKey(e => e.Id)
-				.OnDelete(DeleteBehavior.NoAction);
+				.OnDelete(DeleteBehavior.SetNull);
 
 			modelBuilder.Entity<Order>()
 				.HasOne(e => e.Car)

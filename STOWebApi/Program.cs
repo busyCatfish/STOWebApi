@@ -63,6 +63,8 @@ namespace STOWebApi
 
 			app.MapControllers();
 
+			app.UseCors("AllowOrigin");
+
 			SeedData.EnsurePopulated(app);
 
 			app.Run();

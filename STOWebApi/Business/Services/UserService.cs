@@ -91,6 +91,21 @@ namespace STOWebApi.Business.Services
 
 			CheckUserModel(user);
 
+			User oldUser = await Object.UserRepository.GetByIdAsync(user.Id);
+
+			if(oldUser == null)
+			{
+				throw new STOSystemException("Incorrect user id!");
+			}
+
+			if(oldUser.Id != user.Id)
+			{
+				throw new STOSystemException("Don`t change id!");
+			}
+
+			user.Password = oldUser.Password;
+			user.Role = oldUser.Role;
+
 			await Object.UserRepository.UpdateAsync(user);
 
 			await Object.SaveAsync();

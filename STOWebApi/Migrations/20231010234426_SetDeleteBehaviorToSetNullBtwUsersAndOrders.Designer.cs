@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using STOWebApi.Data;
 
@@ -11,9 +12,11 @@ using STOWebApi.Data;
 namespace STOWebApi.Migrations
 {
     [DbContext(typeof(STODbContext))]
-    partial class STODbContextModelSnapshot : ModelSnapshot
+    [Migration("20231010234426_SetDeleteBehaviorToSetNullBtwUsersAndOrders")]
+    partial class SetDeleteBehaviorToSetNullBtwUsersAndOrders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +47,9 @@ namespace STOWebApi.Migrations
                         .HasColumnType("nvarchar(17)");
 
                     b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.HasKey("Vincode");
 
