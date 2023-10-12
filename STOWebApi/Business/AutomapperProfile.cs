@@ -13,6 +13,7 @@ namespace STOWebApi.Business
 		{
 			CreateMap<User, UserRegistrationModel>()
 				.ForMember(urm => urm.UserName, u => u.MapFrom(x => x.UserName))
+				.ForMember(urm => urm.Password, u => u.MapFrom(x => string.Empty))
 				.ForMember(urm => urm.Email, u => u.MapFrom(x => x.Email))
 				.ForMember(urm => urm.Name, u => u.MapFrom(x => x.FirstName))
 				.ForMember(urm => urm.Surname, u => u.MapFrom(x => x.LastName))
@@ -27,14 +28,15 @@ namespace STOWebApi.Business
 				.ForMember(um => um.Name, u => u.MapFrom(x => x.FirstName))
 				.ForMember(um => um.Surname, u => u.MapFrom(x => x.LastName))
 				.ForMember(um => um.Telephone, u => u.MapFrom(x => x.Telephone))
+				.ForMember(um => um.Role, u => u.MapFrom(x => x.Role))
 				.ForMember(um => um.CarsVincode, u => u.MapFrom(x => x.Cars.Select(c => c.Vincode)))
 				.ForMember(um => um.OrdersId, u => u.MapFrom(x => x.Orders.Select(o => o.Id)))
 				.ReverseMap();
 
-			CreateMap<User, UserRegistrationModel>()
-				.ForMember(urm => urm.UserName, u => u.MapFrom(x => x.UserName))
-				.ForMember(urm => urm.Password, u => u.MapFrom(x => x.Password))
-				.ReverseMap();
+			//CreateMap<User, UserRegistrationModel>()
+			//	.ForMember(urm => urm.UserName, u => u.MapFrom(x => x.UserName))
+			//	.ForMember(urm => urm.Password, u => u.MapFrom(x => x.Password))
+			//	.ReverseMap();
 
 			CreateMap<Worker, WorkerModel>()
 				.ForMember(wm => wm.WorkerId, w => w.MapFrom(x => x.Id))
@@ -80,8 +82,8 @@ namespace STOWebApi.Business
 
 			CreateMap<Car, CarRegistrationModel>()
 				.ForMember(cm => cm.Vincode, c => c.MapFrom(x => x.Vincode))
-				.ReverseMap()
-				.AfterMap((cm, c) => cm.UserName = c.User != null ? c.User.UserName : "");
+				.AfterMap((c, cm) => cm.UserName = c.User != null ? c.User.UserName : "")
+				.ReverseMap();
 
 			CreateMap<Order, OrderModel>()
 				.ForMember(om => om.OrderId, o => o.MapFrom(x => x.Id))

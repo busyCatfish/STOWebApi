@@ -80,7 +80,7 @@ namespace STOWebApi.Business.Services
 			return workersModel;
 		}
 
-		public async Task UpdateAsync(WorkerModel model)
+		public async Task UpdateAsync(WorkerRegistrationModel model, int modelId)
 		{
 			if (model == null)
 			{
@@ -88,6 +88,8 @@ namespace STOWebApi.Business.Services
 			}
 
 			Worker worker = Mapper.Map<Worker>(model);
+
+			worker.Id = modelId;
 
 			CheckWorkerModel(worker);
 
@@ -103,7 +105,7 @@ namespace STOWebApi.Business.Services
 				throw new STOSystemException("Worker cannot be null!");
 			}
 
-			if (worker.Id <= 0)
+			if (worker.Id < 0)
 			{
 				throw new STOSystemException("WorkerId should be more than 0!");
 			}

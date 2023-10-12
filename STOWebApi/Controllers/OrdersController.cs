@@ -77,14 +77,14 @@ namespace STOWebApi.Controllers
 		[HttpPatch]
 		[HttpPut]
 		[Route("{id}")]
-		public async Task<ActionResult> Update(int id, [FromBody] OrderModel updateOrder)
+		public async Task<ActionResult> Update(int id, [FromBody] OrderRegistrationModel updateOrder)
 		{
-			if (id != updateOrder.OrderId)
-			{
-				return BadRequest();
-			}
+			//if (id != updateOrder.OrderId)
+			//{
+			//	return BadRequest();
+			//}
 
-			await _orderService.UpdateAsync(updateOrder);
+			await _orderService.UpdateAsync(updateOrder, id);
 
 			return Ok();
 		}

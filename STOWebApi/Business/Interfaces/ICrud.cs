@@ -10,6 +10,6 @@
 
 		Task DeleteByIdAsync(TKey modelId);
 
-		Task UpdateAsync(TModel model);
+		Task UpdateAsync(TRegistrationModel model, TKey modelId);
 	}
 }

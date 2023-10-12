@@ -30,8 +30,9 @@ namespace STOWebApi.Business.Services
 			Car car = Mapper.Map<Car>(model);
 
 			car.UserId = await this.GetUserIdByUserName(model.UserName);
+            await Console.Out.WriteLineAsync(model.UserName);
 
-			this.CheckCarModel(car);
+            this.CheckCarModel(car);
 
 			await Object.CarRepository.AddAsync(car);
 
@@ -87,7 +88,7 @@ namespace STOWebApi.Business.Services
 			return carsModel;
 		}
 
-		public async Task UpdateAsync(CarModel model)
+		public async Task UpdateAsync(CarRegistrationModel model, string vincode)
 		{
 			if (model == null)
 			{

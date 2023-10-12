@@ -89,7 +89,7 @@ namespace STOWebApi.Data.Repositories
 
 		public async Task<User?> GetUserByUserNameAsync(string userName)
 		{
-			User? user = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+			User? user = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserName.Equals(userName));
 
 			return user;
 		}

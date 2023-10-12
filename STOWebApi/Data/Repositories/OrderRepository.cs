@@ -87,7 +87,7 @@ namespace STOWebApi.Data.Repositories
 		public async Task<IEnumerable<Order>> GetOrdersByPeriodOfTimeAsync(DateTime start, DateTime finish)
 		{
 			IEnumerable<Order> orders = await _dbContext.Orders
-												.Where(o => o.StartDate > start && o.StartDate < finish)
+												.Where(o => o.StartDate >= start && o.StartDate <= finish)
 												.Include(o => o.Car)
 												.Include(o => o.User)
 												.Include(o => o.Masters)

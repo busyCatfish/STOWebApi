@@ -80,7 +80,7 @@ namespace STOWebApi.Business.Services
 			return mastersModel;
 		}
 
-		public async Task UpdateAsync(MasterModel model)
+		public async Task UpdateAsync(MasterRegistrationModel model, int masterId)
 		{
 			if (model == null)
 			{
@@ -88,6 +88,8 @@ namespace STOWebApi.Business.Services
 			}
 
 			Master master = Mapper.Map<Master>(model);
+
+			master.Id = masterId;
 
 			CheckMasterModel(master);
 
@@ -103,9 +105,9 @@ namespace STOWebApi.Business.Services
 				throw new STOSystemException("Master cannot be null!");
 			}
 
-			if (master.Id <= 0)
+			if (master.Id < 0)
 			{
-				throw new STOSystemException("UserId should be more than 0!");
+				throw new STOSystemException("MasterId should be more than 0!");
 			}
 
 			if (master.WorkerId <= 0)

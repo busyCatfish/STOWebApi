@@ -77,14 +77,14 @@ namespace STOWebApi.Controllers
 		[HttpPatch]
 		[HttpPut]
 		[Route("{vincode}")]
-		public async Task<ActionResult> Update(string vincode, [FromBody] CarModel updateCar)
+		public async Task<ActionResult> Update(string vincode, [FromBody] CarRegistrationModel updateCar)
 		{
 			if (vincode != updateCar.Vincode)
 			{
 				return BadRequest();
 			}
 
-			await _carService.UpdateAsync(updateCar);
+			await _carService.UpdateAsync(updateCar, vincode);
 
 			return Ok();
 		}

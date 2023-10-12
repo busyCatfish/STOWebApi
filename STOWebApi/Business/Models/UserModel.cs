@@ -1,4 +1,6 @@
-﻿namespace STOWebApi.Business.Models
+﻿using STOWebApi.Data.Entity;
+
+namespace STOWebApi.Business.Models
 {
 	public class UserModel
 	{
@@ -13,6 +15,8 @@
 		public string Telephone { get; set; }
 
 		public string Email { get; set; }
+
+		public RoleEnum Role { get; set; }
 
 		public IEnumerable<string> CarsVincode { get; set; }
 

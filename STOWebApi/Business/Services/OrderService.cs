@@ -100,7 +100,9 @@ namespace STOWebApi.Business.Services
 
 			if (filter.StartDate != null)
 			{
-				orders = orders.Where(o => o.StartDate >= filter.StartDate && o.StartDate <= filter.FinisheDate);
+				if(filter.FinisheDate != null)
+					orders = orders.Where(o => o.StartDate >= filter.StartDate && o.StartDate <= filter.FinisheDate);
+				else orders = orders.Where(o => o.StartDate >= filter.StartDate);
 			}
 
 			var ordersModel = Mapper.Map<IEnumerable<OrderModel>>(orders);
@@ -159,7 +161,7 @@ namespace STOWebApi.Business.Services
 		//	return ordersModel;
 		//}
 
-		public async Task UpdateAsync(OrderModel model)
+		public async Task UpdateAsync(OrderRegistrationModel model, int modelId)
 		{
 			if (model == null)
 			{
@@ -167,6 +169,8 @@ namespace STOWebApi.Business.Services
 			}
 
 			Order order = Mapper.Map<Order>(model);
+
+			order.Id = modelId;
 
 			CheckOrderModel(order);
 
@@ -206,7 +210,7 @@ namespace STOWebApi.Business.Services
 				throw new STOSystemException("Order cannot be null!");
 			}
 
-			if (order.Id <= 0)
+			if (order.Id < 0)
 			{
 				throw new STOSystemException("OrderId should be more than 0!");
 			}
@@ -226,7 +230,7 @@ namespace STOWebApi.Business.Services
 				throw new STOSystemException("Details cannot be null or empty");
 			}
 
-			if (order.UserId <= 0)
+			if (order.UserId < 0)
 			{
 				throw new STOSystemException("UserId should be more than 0!");
 			}

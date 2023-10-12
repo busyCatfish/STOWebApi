@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using STOWebApi.Business.Interfaces;
 using STOWebApi.Business.Models;
 using STOWebApi.Business.Validation;
@@ -80,7 +81,7 @@ namespace STOWebApi.Business.Services
 			return usersModel;
 		}
 
-		public async Task UpdateAsync(UserModel model)
+		public async Task UpdateAsync(UserRegistrationModel model, int modelId)
 		{
 			if (model == null)
 			{
@@ -89,21 +90,27 @@ namespace STOWebApi.Business.Services
 
 			User user = Mapper.Map<User>(model);
 
+			user.Id = modelId;
+
 			CheckUserModel(user);
 
-			User oldUser = await Object.UserRepository.GetByIdAsync(user.Id);
+			User? oldUser = await Object.UserRepository.GetByIdAsync(user.Id);
 
 			if(oldUser == null)
 			{
 				throw new STOSystemException("Incorrect user id!");
 			}
 
-			if(oldUser.Id != user.Id)
+			if(oldUser.Id != modelId)
 			{
 				throw new STOSystemException("Don`t change id!");
 			}
 
-			user.Password = oldUser.Password;
+			if(oldUser.Password.IsNullOrEmpty() || oldUser.Password == "")
+			{
+				user.Password = oldUser.Password;
+			}
+
 			user.Role = oldUser.Role;
 
 			await Object.UserRepository.UpdateAsync(user);
