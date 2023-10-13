@@ -16,7 +16,7 @@ namespace STOWebApi.Business.Models
 
 		public string Email { get; set; }
 
-		public RoleEnum Role { get; set; }
+		public string Role { get; set; }
 
 		public IEnumerable<string> CarsVincode { get; set; }
 

@@ -16,7 +16,7 @@ namespace STOWebApi.Business.Models
 
 		public decimal Salary { get; set; }
 
-		public PositionEnum Position { get; set; }
+		public string Position { get; set; }
 
 		public int? MasterId { get; set; }
 	}

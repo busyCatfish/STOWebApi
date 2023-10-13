@@ -16,10 +16,11 @@ namespace STOWebApi.Business
 				.ForMember(urm => urm.Password, u => u.MapFrom(x => string.Empty))
 				.ForMember(urm => urm.Email, u => u.MapFrom(x => x.Email))
 				.ForMember(urm => urm.Name, u => u.MapFrom(x => x.FirstName))
+				.ForMember(u => u.Role, urm => urm.MapFrom(x => x.Role.ToString()))
 				.ForMember(urm => urm.Surname, u => u.MapFrom(x => x.LastName))
 				.ForMember(urm => urm.Telephone, u => u.MapFrom(x => x.Telephone))
-				.ForMember(urm => urm.Role, u => u.MapFrom(x => x.Role))
-				.ReverseMap();
+				.ReverseMap()
+				.ForMember(u => u.Role, urm => urm.MapFrom(x => StaticTools.GetRoleEnumByRoleString(x.Role)));
 
 			CreateMap<User, UserModel>()
 				.ForMember(um => um.UserId, u => u.MapFrom(x => x.Id))
@@ -28,10 +29,11 @@ namespace STOWebApi.Business
 				.ForMember(um => um.Name, u => u.MapFrom(x => x.FirstName))
 				.ForMember(um => um.Surname, u => u.MapFrom(x => x.LastName))
 				.ForMember(um => um.Telephone, u => u.MapFrom(x => x.Telephone))
-				.ForMember(um => um.Role, u => u.MapFrom(x => x.Role))
+				.ForMember(um => um.Role, u => u.MapFrom(x => x.Role.ToString()))
 				.ForMember(um => um.CarsVincode, u => u.MapFrom(x => x.Cars.Select(c => c.Vincode)))
 				.ForMember(um => um.OrdersId, u => u.MapFrom(x => x.Orders.Select(o => o.Id)))
-				.ReverseMap();
+				.ReverseMap()
+				.ForMember(u => u.Role, urm => urm.MapFrom(x => StaticTools.GetRoleEnumByRoleString(x.Role)));
 
 			//CreateMap<User, UserRegistrationModel>()
 			//	.ForMember(urm => urm.UserName, u => u.MapFrom(x => x.UserName))
@@ -44,33 +46,37 @@ namespace STOWebApi.Business
 				.ForMember(wm => wm.Name, w => w.MapFrom(x => x.FirstName))
 				.ForMember(wm => wm.Surname, w => w.MapFrom(x => x.LastName))
 				.ForMember(wm => wm.Telephone, w => w.MapFrom(x => x.Telephone))
-				.ForMember(wm => wm.Position, w => w.MapFrom(x => x.Position))
+				.ForMember(wm => wm.Position, w => w.MapFrom(x => x.Position.ToString()))
 				.ForMember(wm => wm.Salary, w => w.MapFrom(x => x.Salary))
 				.AfterMap((w, wm) => wm.MasterId = w.Master != null ? w.Master.Id : 0)
-				.ReverseMap();
+				.ReverseMap()
+				.ForMember(w => w.Position, wm => wm.MapFrom(x => StaticTools.GetPositionEnumByPositionString(x.Position)));
 
 			CreateMap<Worker, WorkerRegistrationModel>()
 				.ForMember(wm => wm.Name, w => w.MapFrom(x => x.FirstName))
 				.ForMember(wm => wm.Surname, w => w.MapFrom(x => x.LastName))
 				.ForMember(wm => wm.Email, w => w.MapFrom(x => x.Email))
 				.ForMember(wm => wm.Telephone, w => w.MapFrom(x => x.Telephone))
-				.ForMember(wm => wm.Position, w => w.MapFrom(x => x.Position))
+				.ForMember(wm => wm.Position, w => w.MapFrom(x => x.Position.ToString()))
 				.ForMember(wm => wm.Salary, w => w.MapFrom(x => x.Salary))
-				.ReverseMap();
+				.ReverseMap()
+				.ForMember(w => w.Position, wm => wm.MapFrom(x => StaticTools.GetPositionEnumByPositionString(x.Position)));
 
 			CreateMap<Master, MasterModel>()
 				.ForMember(mm => mm.MasterId, m => m.MapFrom(x => x.Id))
 				.ForMember(mm => mm.WorkerId, m => m.MapFrom(x => x.WorkerId))
-				.ForMember(mm => mm.Type, m => m.MapFrom(x => x.Type))
+				.ForMember(mm => mm.Type, m => m.MapFrom(x => x.Type.ToString()))
 				.ForMember(mm => mm.Description, m => m.MapFrom(x => x.Description))
 				.ForMember(mm => mm.OrdersId, m => m.MapFrom(x => x.Orders.Select(o => o.Id)))
-				.ReverseMap();
+				.ReverseMap()
+				.ForMember(m => m.Type, mm => mm.MapFrom(x => StaticTools.GetMasterTypeEnumByMasterTypeString(x.Type)));
 
 			CreateMap<Master, MasterRegistrationModel>()
 				.ForMember(mm => mm.WorkerId, m => m.MapFrom(x => x.WorkerId))
-				.ForMember(mm => mm.Type, m => m.MapFrom(x => x.Type))
+				.ForMember(mm => mm.Type, m => m.MapFrom(x => x.Type.ToString()))
 				.ForMember(mm => mm.Description, m => m.MapFrom(x => x.Description))
-				.ReverseMap();
+				.ReverseMap()
+				.ForMember(m => m.Type, mm => mm.MapFrom(x => StaticTools.GetMasterTypeEnumByMasterTypeString(x.Type)));
 
 			CreateMap<Car, CarModel>()
 				.ForMember(cm => cm.Vincode, c => c.MapFrom(x => x.Vincode))
@@ -94,12 +100,13 @@ namespace STOWebApi.Business
 				.ForMember(om => om.Price, o => o.MapFrom(x => x.Price))
 				.ForMember(om => om.StartDate, o => o.MapFrom(x => x.StartDate))
 				.ForMember(om => om.FinisheDate, o => o.MapFrom(x => x.FinisheDate))
-				.ForMember(om => om.State, o => o.MapFrom(x => x.State))
+				.ForMember(om => om.State, o => o.MapFrom(x => x.State.ToString()))
 				.ForMember(om => om.MastersId, o => o.MapFrom(x => x.Masters.Select(m => m.Id)))
 				.AfterMap((o, om) => om.UserName = o.User != null ? o.User.UserName : "")
 				.AfterMap((o, om) => om.Name = o.User != null ? o.User.FirstName : "")
 				.AfterMap((o, om) => om.Surname = o.User != null ? o.User.LastName : "")
-				.ReverseMap();
+				.ReverseMap()
+				.ForMember(o => o.State, om => om.MapFrom(x => StaticTools.GetStateEnumByStateString(x.State)));
 
 			CreateMap<Order, OrderRegistrationModel>()
 				.ForMember(om => om.CarVincode, o => o.MapFrom(x => x.CarVincode))
@@ -109,32 +116,9 @@ namespace STOWebApi.Business
 				.ForMember(om => om.Price, o => o.MapFrom(x => x.Price))
 				.ForMember(om => om.StartDate, o => o.MapFrom(x => x.StartDate))
 				.ForMember(om => om.FinisheDate, o => o.MapFrom(x => x.FinisheDate))
-				.ForMember(om => om.State, o => o.MapFrom(x => x.State))
-				.ReverseMap();
+				.ForMember(om => om.State, o => o.MapFrom(x => x.State.ToString()))
+				.ReverseMap()
+				.ForMember(o => o.State, om => om.MapFrom(x => StaticTools.GetStateEnumByStateString(x.State)));
 		}
-
-		//private int GetUserIdByUserName(string userName)
-		//{
-		//	var user = Object.UserRepository.GetUserByUserNameAsync(userName).Result;
-
-		//	if (user == null)
-		//	{
-		//		throw new STOSystemException($"Не існує користувача з таким username: {userName}");
-		//	}
-
-		//	return user.Id;
-		//}
-
-		//private IEnumerable<Master> GetMastersByTheirId(IEnumerable<int> mastersId)
-		//{
-		//	var masters = Object.MasterRepository.GetByIdsAsync(mastersId).Result;
-
-		//	if (masters == null)
-		//	{
-		//		throw new STOSystemException("Ви не вибрали жодного майстра для цієї роботи!");
-		//	}
-
-		//	return masters;
-		//}
 	}
 }

@@ -12,7 +12,7 @@ namespace STOWebApi.Business.Models
 
 		public string Surname { get; set; }
 
-		public RoleEnum Role { get; set; }
+		public string Role { get; set; }
 
 		public string Telephone { get; set; }
 

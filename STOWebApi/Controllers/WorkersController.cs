@@ -36,9 +36,9 @@ namespace STOWebApi.Controllers
 		//GET: api/workers/1
 		[HttpGet]
 		[Route("{id}")]
-		public async Task<ActionResult<WorkerModel>> GetById(int id)
+		public async Task<ActionResult<WorkerRegistrationModel>> GetById(int id)
 		{
-			WorkerModel worker = await _workerService.GetByIdAsync(id);
+			WorkerRegistrationModel worker = await _workerService.GetByIdAsync(id);
 
 			if (worker is null)
 			{

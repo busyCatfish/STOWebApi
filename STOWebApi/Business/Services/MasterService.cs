@@ -57,7 +57,7 @@ namespace STOWebApi.Business.Services
 			return mastersModel;
 		}
 
-		public async Task<MasterModel> GetByIdAsync(int modelId)
+		public async Task<MasterRegistrationModel> GetByIdAsync(int modelId)
 		{
 			if (modelId <= 0)
 			{
@@ -66,7 +66,7 @@ namespace STOWebApi.Business.Services
 
 			var master = await Object.MasterRepository.GetByIdWithDetailsAsync(modelId);
 
-			var masterModel = Mapper.Map<MasterModel>(master);
+			var masterModel = Mapper.Map<MasterRegistrationModel>(master);
 
 			return masterModel;
 		}

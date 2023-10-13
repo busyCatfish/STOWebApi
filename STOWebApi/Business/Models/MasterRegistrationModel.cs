@@ -7,7 +7,7 @@ namespace STOWebApi.Business.Models
 	{
 		public int WorkerId { get; set; }
 
-		public MasterTypeEnum Type { get; set; }
+		public string Type { get; set; }
 
 		public string? Description { get; set; }
 	}

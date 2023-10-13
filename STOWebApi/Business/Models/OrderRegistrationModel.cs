@@ -20,7 +20,7 @@ namespace STOWebApi.Business.Models
 
 		public decimal PriceOfDetails { get; set; }
 
-		public StateEnum State { get; set; }
+		public string State { get; set; }
 
 		public IEnumerable<int> MastersId { get; set; }
 	}

@@ -36,9 +36,9 @@ namespace STOWebApi.Controllers
 		//GET: api/masters/1
 		[HttpGet]
 		[Route("{id}")]
-		public async Task<ActionResult<MasterModel>> GetById(int id)
+		public async Task<ActionResult<MasterRegistrationModel>> GetById(int id)
 		{
-			MasterModel master = await _masterService.GetByIdAsync(id);
+			MasterRegistrationModel master = await _masterService.GetByIdAsync(id);
 
 			if (master is null)
 			{

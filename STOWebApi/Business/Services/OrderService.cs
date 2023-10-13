@@ -63,7 +63,7 @@ namespace STOWebApi.Business.Services
 			return ordersModel;
 		}
 
-		public async Task<OrderModel> GetByIdAsync(int modelId)
+		public async Task<OrderRegistrationModel> GetByIdAsync(int modelId)
 		{
 			if (modelId <= 0)
 			{
@@ -72,7 +72,7 @@ namespace STOWebApi.Business.Services
 
 			var order = await Object.OrderRepository.GetByIdWithDetailsAsync(modelId);
 
-			var orderModel = Mapper.Map<OrderModel>(order);
+			var orderModel = Mapper.Map<OrderRegistrationModel>(order);
 
 			return orderModel;
 		}
@@ -95,7 +95,8 @@ namespace STOWebApi.Business.Services
 
 			if (filter.State != null)
 			{
-				orders = orders.Where(o => o.State == filter.State);
+				var filterState = StaticTools.GetStateEnumByStateString(filter.State);
+				orders = orders.Where(o => o.State == filterState);
 			}
 
 			if (filter.StartDate != null)
@@ -179,13 +180,14 @@ namespace STOWebApi.Business.Services
 			await Object.SaveAsync();
 		}
 
-		private async Task<int> GetUserIdByUserName(string userName)
+		private async Task<int?> GetUserIdByUserName(string userName)
 		{
 			var user = await Object.UserRepository.GetUserByUserNameAsync(userName);
 
 			if (user == null)
 			{
-				throw new STOSystemException($"Не існує користувача з таким username: {userName}");
+				return null;
+				//throw new STOSystemException($"Не існує користувача з таким username: {userName}");
 			}
 
 			return user.Id;
@@ -230,7 +232,7 @@ namespace STOWebApi.Business.Services
 				throw new STOSystemException("Details cannot be null or empty");
 			}
 
-			if (order.UserId < 0)
+			if (order.UserId != null && order.UserId < 0)
 			{
 				throw new STOSystemException("UserId should be more than 0!");
 			}

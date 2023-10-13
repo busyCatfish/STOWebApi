@@ -57,7 +57,7 @@ namespace STOWebApi.Business.Services
 			return workersModel;
 		}
 
-		public async Task<WorkerModel> GetByIdAsync(int modelId)
+		public async Task<WorkerRegistrationModel> GetByIdAsync(int modelId)
 		{
 			if (modelId <= 0)
 			{
@@ -66,7 +66,7 @@ namespace STOWebApi.Business.Services
 
 			var worker = await Object.WorkerRepository.GetByIdWithDetailsAsync(modelId);
 
-			var workerModel = Mapper.Map<WorkerModel>(worker);
+			var workerModel = Mapper.Map<WorkerRegistrationModel>(worker);
 
 			return workerModel;
 		}

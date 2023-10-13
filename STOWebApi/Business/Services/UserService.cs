@@ -58,7 +58,7 @@ namespace STOWebApi.Business.Services
 			return usersModel;
 		}
 
-		public async Task<UserModel> GetByIdAsync(int modelId)
+		public async Task<UserRegistrationModel> GetByIdAsync(int modelId)
 		{
 			if (modelId <= 0)
 			{
@@ -67,7 +67,7 @@ namespace STOWebApi.Business.Services
 
 			var user = await Object.UserRepository.GetByIdWithDetailsAsync(modelId);
 
-			var userModel = Mapper.Map<UserModel>(user);
+			var userModel = Mapper.Map<UserRegistrationModel>(user);
 
 			return userModel;
 		}
@@ -125,7 +125,7 @@ namespace STOWebApi.Business.Services
 				throw new STOSystemException("User cannot be null!");
 			}
 
-			if (user.Id <= 0)
+			if (user.Id < 0)
 			{
 				throw new STOSystemException("UserId should be more than 0!");
 			}

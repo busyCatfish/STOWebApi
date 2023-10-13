@@ -36,9 +36,9 @@ namespace STOWebApi.Controllers
 		//GET: api/orders/1
 		[HttpGet]
 		[Route("{id}")]
-		public async Task<ActionResult<OrderModel>> GetById(int id)
+		public async Task<ActionResult<OrderRegistrationModel>> GetById(int id)
 		{
-			OrderModel order = await _orderService.GetByIdAsync(id);
+			OrderRegistrationModel order = await _orderService.GetByIdAsync(id);
 
 			if (order is null)
 			{

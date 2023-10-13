@@ -36,9 +36,9 @@ namespace STOWebApi.Controllers
 		//GET: api/users/1
 		[HttpGet]
 		[Route("{id}")]
-		public async Task<ActionResult<UserModel>> GetById(int id)
+		public async Task<ActionResult<UserRegistrationModel>> GetById(int id)
 		{
-			UserModel user = await _userService.GetByIdAsync(id);
+			UserRegistrationModel user = await _userService.GetByIdAsync(id);
 
 			if (user is null)
 			{
@@ -79,11 +79,6 @@ namespace STOWebApi.Controllers
 		[Route("{id}")]
 		public async Task<ActionResult> Update(int id, [FromBody] UserRegistrationModel updateUser)
 		{
-			//if (id != updateUser.UserId)
-			//{
-			//	return BadRequest();
-			//}
-
 			await _userService.UpdateAsync(updateUser, id);
 
 			return Ok("Updated");

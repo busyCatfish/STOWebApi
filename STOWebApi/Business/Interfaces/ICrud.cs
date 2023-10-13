@@ -4,7 +4,7 @@
 	{
 		Task<IEnumerable<TModel>> GetAllAsync();
 
-		Task<TModel> GetByIdAsync(TKey modelId);
+		Task<TRegistrationModel> GetByIdAsync(TKey modelId);
 
 		Task AddAsync(TRegistrationModel model);
 

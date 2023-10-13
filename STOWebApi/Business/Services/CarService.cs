@@ -30,7 +30,6 @@ namespace STOWebApi.Business.Services
 			Car car = Mapper.Map<Car>(model);
 
 			car.UserId = await this.GetUserIdByUserName(model.UserName);
-            await Console.Out.WriteLineAsync(model.UserName);
 
             this.CheckCarModel(car);
 
@@ -60,7 +59,7 @@ namespace STOWebApi.Business.Services
 			return carsModel;
 		}
 
-		public async Task<CarModel> GetByIdAsync(string vincode)
+		public async Task<CarRegistrationModel> GetByIdAsync(string vincode)
 		{
 			if (string.IsNullOrEmpty(vincode))
 			{
@@ -69,7 +68,7 @@ namespace STOWebApi.Business.Services
 
 			var car = await Object.CarRepository.GetByIdWithDetailsAsync(vincode);
 
-			var carModel = Mapper.Map<CarModel>(car);
+			var carModel = Mapper.Map<CarRegistrationModel>(car);
 
 			return carModel;
 		}
@@ -104,13 +103,14 @@ namespace STOWebApi.Business.Services
 			await Object.SaveAsync();
 		}
 
-		private async Task<int> GetUserIdByUserName(string userName)
+		private async Task<int?> GetUserIdByUserName(string userName)
 		{
 			var user = await Object.UserRepository.GetUserByUserNameAsync(userName);
 
 			if (user == null)
 			{
-				throw new STOSystemException($"Не існує користувача з таким username: {userName}");
+				return null;
+				//throw new STOSystemException($"Не існує користувача з таким username: {userName}");
 			}
 
 			return user.Id;
@@ -128,7 +128,7 @@ namespace STOWebApi.Business.Services
 				throw new STOSystemException("Vincode cannot be null or empty");
 			}
 
-			if (car.UserId <= 0)
+			if (car.UserId != null && car.UserId < 0)
 			{
 				throw new STOSystemException("UserId should be more than 0");
 			}

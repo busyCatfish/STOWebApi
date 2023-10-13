@@ -36,9 +36,9 @@ namespace STOWebApi.Controllers
 		//GET: api/cars/1HGCM82633A123456
 		[HttpGet]
 		[Route("{vincode}")]
-		public async Task<ActionResult<CarModel>> GetById(string vincode)
+		public async Task<ActionResult<CarRegistrationModel>> GetById(string vincode)
 		{
-			CarModel car = await _carService.GetByIdAsync(vincode);
+			CarRegistrationModel car = await _carService.GetByIdAsync(vincode);
 
 			if (car is null)
 			{
