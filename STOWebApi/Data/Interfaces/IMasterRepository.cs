@@ -8,5 +8,7 @@ namespace STOWebApi.Data.Interfaces
 		Task<IEnumerable<Master>> GetMastersByTypeAsync(MasterTypeEnum type);
 
 		Task<IList<Master>> GetByIdsAsync(IEnumerable<int> mastersId);
+
+		Task<IEnumerable<int>> GetIdsByOrderIdWithDetailsAsync(int orderId);
 	}
 }

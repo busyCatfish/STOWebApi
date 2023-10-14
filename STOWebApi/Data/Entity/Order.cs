@@ -10,7 +10,6 @@ namespace STOWebApi.Data.Entity
 
 		public int? UserId { get; set; }
 
-		[Required]
 		public string? CarVincode { get; set; }
 
 		[Required]

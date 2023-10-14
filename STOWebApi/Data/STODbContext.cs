@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using STOWebApi.Data.Entity;
-using STOWebApi.Data.Entity;
 using System.Reflection.Metadata;
 
 namespace STOWebApi.Data
@@ -21,6 +20,8 @@ namespace STOWebApi.Data
 
 		public DbSet<Master> Masters { get; set; }
 
+		public DbSet<OrderMaster> OrdersMasters { get; set; }
+
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<Worker>()
@@ -28,7 +29,7 @@ namespace STOWebApi.Data
 				.WithOne(e => e.Worker)
 				.HasForeignKey<Master>(e => e.WorkerId)
 				.HasPrincipalKey<Worker>(e => e.Id)
-				.OnDelete(DeleteBehavior.NoAction);
+				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<User>()
 				.HasMany(e => e.Cars)
@@ -49,13 +50,25 @@ namespace STOWebApi.Data
 				.WithMany(e => e.Orders)
 				.HasForeignKey(e => e.CarVincode)
 				.HasPrincipalKey(e => e.Vincode)
-				.OnDelete(DeleteBehavior.NoAction);
+				.OnDelete(DeleteBehavior.SetNull);
 
+			modelBuilder.Entity<OrderMaster>()
+				.HasKey(om => new { om.MasterId, om.OrderId });
+
+			//modelBuilder.Entity<OrderMaster>()
+			//	.HasForeignKey(om => om.MasterId)
+			//	.HasForeignKey(om => om.MasterId);
+
+			//modelBuilder.Entity<OrderMaster>()
+			//	.HasOne(om => om.Order)
+			//	.WithMany(o => o.Masters)
+			//	.HasForeignKey(om => om.OrderId);
 
 			modelBuilder.Entity<Order>()
 				.HasMany(o => o.Masters)
 				.WithMany(m => m.Orders)
-				.UsingEntity(j => j.ToTable("OrdersMasters"));
+				.UsingEntity<OrderMaster>();
+				//.UsingEntity(j => j.ToTable("OrdersMasters"));
 
 			base.OnModelCreating(modelBuilder);
 		}

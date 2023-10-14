@@ -96,7 +96,9 @@ namespace STOWebApi.Business.Services
 
 			Car car = Mapper.Map<Car>(model);
 
-			CheckCarModel(car);
+			car.UserId = await this.GetUserIdByUserName(model.UserName);
+
+			this.CheckCarModel(car);
 
 			await Object.CarRepository.UpdateAsync(car);
 

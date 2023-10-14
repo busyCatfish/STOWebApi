@@ -117,6 +117,8 @@ namespace STOWebApi.Business
 				.ForMember(om => om.StartDate, o => o.MapFrom(x => x.StartDate))
 				.ForMember(om => om.FinisheDate, o => o.MapFrom(x => x.FinisheDate))
 				.ForMember(om => om.State, o => o.MapFrom(x => x.State.ToString()))
+				.ForMember(om => om.MastersId, o => o.MapFrom(x => x.Masters.Select(m => m.Id)))
+				.AfterMap((o, om) => om.UserName = o.User != null ? o.User.UserName : "")
 				.ReverseMap()
 				.ForMember(o => o.State, om => om.MapFrom(x => StaticTools.GetStateEnumByStateString(x.State)));
 		}

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using STOWebApi.Business.Interfaces;
 using STOWebApi.Business.Models;
@@ -173,7 +174,13 @@ namespace STOWebApi.Business.Services
 
 			order.Id = modelId;
 
+			order.UserId = await this.GetUserIdByUserName(model.UserName);
+
 			CheckOrderModel(order);
+
+			await Object.OrderMasterRepository.DeleteByOrderIdAsync(modelId);
+
+			order.Masters = await this.GetMastersByTheirId(model.MastersId);
 
 			await Object.OrderRepository.UpdateAsync(order);
 
@@ -199,7 +206,8 @@ namespace STOWebApi.Business.Services
 
 			if (masters == null)
 			{
-				throw new STOSystemException("Ви не вибрали жодного майстра для цієї роботи!");
+				return new List<Master>();
+				//throw new STOSystemException("Ви не вибрали жодного майстра для цієї роботи!");
 			}
 
 			return masters;
@@ -217,9 +225,10 @@ namespace STOWebApi.Business.Services
 				throw new STOSystemException("OrderId should be more than 0!");
 			}
 
-			if (string.IsNullOrEmpty(order.CarVincode))
+			if (string.IsNullOrEmpty(order.CarVincode) || order.CarVincode == "")
 			{
-				throw new STOSystemException("CarVincode cannot be null or empty");
+				order.CarVincode = null;
+				//throw new STOSystemException("CarVincode cannot be null or empty");
 			}
 
 			if (string.IsNullOrEmpty(order.Description))

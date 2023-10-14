@@ -25,6 +25,8 @@ namespace STOWebApi.Data
 
 		public IWorkerRepository WorkerRepository => new WorkerRepository(this.stoDbContext);
 
+		public IOrderMasterRepository OrderMasterRepository => new OrderMasterRepository(this.stoDbContext);
+
 		public async Task SaveAsync()
 		{
 			await this.stoDbContext.SaveChangesAsync();

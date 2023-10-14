@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using STOWebApi.Data;
 
@@ -11,9 +12,11 @@ using STOWebApi.Data;
 namespace STOWebApi.Migrations
 {
     [DbContext(typeof(STODbContext))]
-    partial class STODbContextModelSnapshot : ModelSnapshot
+    [Migration("20231014120735_ChangeDeleteBehaviorBtwOrdersAndCarsOnSetNull")]
+    partial class ChangeDeleteBehaviorBtwOrdersAndCarsOnSetNull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace STOWebApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("MasterOrder", b =>
+                {
+                    b.Property<int>("MastersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrdersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MastersId", "OrdersId");
+
+                    b.HasIndex("OrdersId");
+
+                    b.ToTable("OrdersMasters", (string)null);
+                });
 
             modelBuilder.Entity("STOWebApi.Data.Entity.Car", b =>
                 {
@@ -109,21 +127,6 @@ namespace STOWebApi.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("STOWebApi.Data.Entity.OrderMaster", b =>
-                {
-                    b.Property<int>("MasterId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MasterId", "OrderId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrdersMasters");
-                });
-
             modelBuilder.Entity("STOWebApi.Data.Entity.User", b =>
                 {
                     b.Property<int>("Id")
@@ -206,6 +209,21 @@ namespace STOWebApi.Migrations
                     b.ToTable("Workers");
                 });
 
+            modelBuilder.Entity("MasterOrder", b =>
+                {
+                    b.HasOne("STOWebApi.Data.Entity.Master", null)
+                        .WithMany()
+                        .HasForeignKey("MastersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("STOWebApi.Data.Entity.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("STOWebApi.Data.Entity.Car", b =>
                 {
                     b.HasOne("STOWebApi.Data.Entity.User", "User")
@@ -242,21 +260,6 @@ namespace STOWebApi.Migrations
                     b.Navigation("Car");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("STOWebApi.Data.Entity.OrderMaster", b =>
-                {
-                    b.HasOne("STOWebApi.Data.Entity.Master", null)
-                        .WithMany()
-                        .HasForeignKey("MasterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("STOWebApi.Data.Entity.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("STOWebApi.Data.Entity.Car", b =>

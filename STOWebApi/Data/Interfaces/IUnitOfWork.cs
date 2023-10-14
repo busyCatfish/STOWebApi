@@ -14,6 +14,8 @@ namespace STOWebApi.Data.Interfaces
 
 		IWorkerRepository WorkerRepository { get; }
 
+		IOrderMasterRepository OrderMasterRepository { get; }
+
 		Task SaveAsync();
 	}
 }

@@ -72,6 +72,17 @@ namespace STOWebApi.Data.Repositories
 			return masters;
 		}
 
+		public async Task<IEnumerable<int>> GetIdsByOrderIdWithDetailsAsync(int orderId)
+		{
+			IEnumerable<int> mastersId = await _dbContext.Masters
+															.Include(m => m.Orders)
+															.Where(m => m.Orders.FirstOrDefault(o => o.Id == orderId) != null)
+															.Select(m => m.Id)
+															.ToListAsync();
+
+			return mastersId;
+		}
+
 		public async Task<Master?> GetByIdAsync(int id)
 		{
 			Master? master = await _dbContext.Masters.FindAsync(id);
