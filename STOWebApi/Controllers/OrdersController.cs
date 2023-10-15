@@ -20,18 +20,18 @@ namespace STOWebApi.Controllers
 
 
 		// GET: api/orders
-		[HttpGet]
-		public async Task<ActionResult<IEnumerable<OrderModel>>> GetAllAsync()
-		{
-			IEnumerable<OrderModel> orders = await _orderService.GetAllAsync();
+		//[HttpGet]
+		//public async Task<ActionResult<IEnumerable<OrderModel>>> GetAllAsync()
+		//{
+		//	IEnumerable<OrderModel> orders = await _orderService.GetAllAsync();
 
-			if (orders is null)
-			{
-				return NotFound();
-			}
+		//	if (orders is null)
+		//	{
+		//		return NotFound();
+		//	}
 
-			return Ok(orders);
-		}
+		//	return Ok(orders);
+		//}
 
 		//GET: api/orders/1
 		[HttpGet]
@@ -49,11 +49,30 @@ namespace STOWebApi.Controllers
 		}
 
 		//GET: api/orders/filter?state=YourStateEnumValue&сarVincode=YourCarVincode&userId=YourUserId&startDate=YourStartDate&finisheDate=YourFinisheDate
+		//[HttpGet]
+		//[Route("filter")]
+		//public async Task<ActionResult<IEnumerable<OrderModel>>> GetByFilterAsync([FromQuery] OrderFilterSearchModel filter)
+		//{
+		//	IEnumerable<OrderModel> orders = await _orderService.GetOrdersByFilterAsync(filter);
+
+		//	if (orders is null)
+		//	{
+		//		return NotFound();
+		//	}
+
+		//	return Ok(orders);
+		//}
+
+		//GET: api/orders/filter?state=YourStateEnumValue&сarVincode=YourCarVincode&userId=YourUserId&startDate=YourStartDate&finisheDate=YourFinisheDate
 		[HttpGet]
-		[Route("filter")]
-		public async Task<ActionResult<IEnumerable<OrderModel>>> GetByRollAsync([FromQuery] OrderFilterSearchModel filter)
+		public async Task<ActionResult<IEnumerable<OrderModel>>> GetByFilterAsync([FromQuery] OrderFilterSearchModel? filter)
 		{
-			IEnumerable<OrderModel> orders = await _orderService.GetOrdersByFilterAsync(filter);
+			IEnumerable<OrderModel> orders = null;
+			if (filter == null)
+			{
+				orders = await _orderService.GetAllAsync();
+			}
+			else orders = await _orderService.GetOrdersByFilterAsync(filter);
 
 			if (orders is null)
 			{

@@ -20,18 +20,18 @@ namespace STOWebApi.Controllers
 
 
 		// GET: api/workers
-		[HttpGet]
-		public async Task<ActionResult<IEnumerable<WorkerModel>>> GetAllAsync()
-		{
-			IEnumerable<WorkerModel> workers = await _workerService.GetAllAsync();
+		//[HttpGet]
+		//public async Task<ActionResult<IEnumerable<WorkerModel>>> GetAllAsync()
+		//{
+		//	IEnumerable<WorkerModel> workers = await _workerService.GetAllAsync();
 
-			if (workers is null)
-			{
-				return NotFound();
-			}
+		//	if (workers is null)
+		//	{
+		//		return NotFound();
+		//	}
 
-			return Ok(workers);
-		}
+		//	return Ok(workers);
+		//}
 
 		//GET: api/workers/1
 		[HttpGet]
@@ -49,11 +49,30 @@ namespace STOWebApi.Controllers
 		}
 
 		//GET: api/workers/filter?position=YourPositionEnum
+		//[HttpGet]
+		//[Route("filter")]
+		//public async Task<ActionResult<IEnumerable<WorkerModel>>> GetByPositionAsync([FromQuery] PositionEnum position)
+		//{
+		//	IEnumerable<WorkerModel> workers = await _workerService.GetWorkersByPositionAsync(position);
+
+		//	if (workers is null)
+		//	{
+		//		return NotFound();
+		//	}
+
+		//	return Ok(workers);
+		//}
+
+		//GET: api/workers/filter?position=YourPositionEnum
 		[HttpGet]
-		[Route("filter")]
-		public async Task<ActionResult<IEnumerable<WorkerModel>>> GetByRollAsync([FromQuery] PositionEnum position)
+		public async Task<ActionResult<IEnumerable<WorkerModel>>> GetByPositionAsync([FromQuery] PositionEnum? position)
 		{
-			IEnumerable<WorkerModel> workers = await _workerService.GetWorkersByPositionAsync(position);
+			IEnumerable<WorkerModel> workers = null;
+			if(position == null)
+			{
+				workers = await _workerService.GetAllAsync();
+			}
+			else workers = await _workerService.GetWorkersByPositionAsync((PositionEnum)position);
 
 			if (workers is null)
 			{

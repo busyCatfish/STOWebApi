@@ -20,18 +20,18 @@ namespace STOWebApi.Controllers
 
 
 		// GET: api/users
-		[HttpGet]
-		public async Task<ActionResult<IEnumerable<UserModel>>> GetAllAsync()
-		{
-			IEnumerable<UserModel> users = await _userService.GetAllAsync();
+		//[HttpGet]
+		//public async Task<ActionResult<IEnumerable<UserModel>>> GetAllAsync()
+		//{
+		//	IEnumerable<UserModel> users = await _userService.GetAllAsync();
 
-			if (users is null)
-			{
-				return NotFound();
-			}
+		//	if (users is null)
+		//	{
+		//		return NotFound();
+		//	}
 
-			return Ok(users);
-		}
+		//	return Ok(users);
+		//}
 
 		//GET: api/users/1
 		[HttpGet]
@@ -49,11 +49,30 @@ namespace STOWebApi.Controllers
 		}
 
 		//GET: api/users/filter?role=YourRoleEnumValue
+		//[HttpGet]
+		//[Route("filter")]
+		//public async Task<ActionResult<IEnumerable<UserModel>>> GetByRollAsync([FromQuery] RoleEnum role)
+		//{
+		//	IEnumerable<UserModel> users = await _userService.GetUsersByRollAsync(role);
+
+		//	if (users is null)
+		//	{
+		//		return NotFound();
+		//	}
+
+		//	return Ok(users);
+		//}
+
+		//GET: api/users/filter?role=YourRoleEnumValue
 		[HttpGet]
-		[Route("filter")]
-		public async Task<ActionResult<IEnumerable<UserModel>>> GetByRollAsync([FromQuery] RoleEnum role)
+		public async Task<ActionResult<IEnumerable<UserModel>>> GetByRollAsync([FromQuery] RoleEnum? role)
 		{
-			IEnumerable<UserModel> users = await _userService.GetUsersByRollAsync(role);
+			IEnumerable<UserModel> users = null;
+			if(role == null)
+			{
+				users = await _userService.GetAllAsync();
+			}
+			else users = await _userService.GetUsersByRollAsync((RoleEnum)role);
 
 			if (users is null)
 			{

@@ -20,18 +20,18 @@ namespace STOWebApi.Controllers
 
 
 		// GET: api/masters
-		[HttpGet]
-		public async Task<ActionResult<IEnumerable<MasterModel>>> GetAllAsync()
-		{
-			IEnumerable<MasterModel> masters = await _masterService.GetAllAsync();
+		//[HttpGet]
+		//public async Task<ActionResult<IEnumerable<MasterModel>>> GetAllAsync()
+		//{
+		//	IEnumerable<MasterModel> masters = await _masterService.GetAllAsync();
 
-			if (masters is null)
-			{
-				return NotFound();
-			}
+		//	if (masters is null)
+		//	{
+		//		return NotFound();
+		//	}
 
-			return Ok(masters);
-		}
+		//	return Ok(masters);
+		//}
 
 		//GET: api/masters/1
 		[HttpGet]
@@ -49,11 +49,29 @@ namespace STOWebApi.Controllers
 		}
 
 		//GET: api/masters/filter?type=YourMasterTypeEnum
+		//[HttpGet]
+		//[Route("filter")]
+		//public async Task<ActionResult<IEnumerable<MasterModel>>> GetByMasterTypeAsync([FromQuery] MasterTypeEnum type)
+		//{
+		//	IEnumerable<MasterModel> masters = await _masterService.GetMastersByTypeAsync(type);
+
+		//	if (masters is null)
+		//	{
+		//		return NotFound();
+		//	}
+
+		//	return Ok(masters);
+		//}
+		//GET: api/masters/filter?type=YourMasterTypeEnum
 		[HttpGet]
-		[Route("filter")]
-		public async Task<ActionResult<IEnumerable<MasterModel>>> GetByRollAsync([FromQuery] MasterTypeEnum type)
+		public async Task<ActionResult<IEnumerable<MasterModel>>> GetByMasterTypeAsync([FromQuery] MasterTypeEnum? type)
 		{
-			IEnumerable<MasterModel> masters = await _masterService.GetMastersByTypeAsync(type);
+			IEnumerable<MasterModel> masters = null;
+			if (type == null)
+			{
+				masters = await _masterService.GetAllAsync();
+			}
+			else masters = await _masterService.GetMastersByTypeAsync((MasterTypeEnum)type);
 
 			if (masters is null)
 			{

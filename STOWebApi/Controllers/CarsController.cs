@@ -20,18 +20,18 @@ namespace STOWebApi.Controllers
 
 
 		// GET: api/cars
-		[HttpGet]
-		public async Task<ActionResult<IEnumerable<CarModel>>> GetAllAsync()
-		{
-			IEnumerable<CarModel> cars = await _carService.GetAllAsync();
+		//[HttpGet]
+		//public async Task<ActionResult<IEnumerable<CarModel>>> GetAllAsync()
+		//{
+		//	IEnumerable<CarModel> cars = await _carService.GetAllAsync();
 
-			if (cars is null)
-			{
-				return NotFound();
-			}
+		//	if (cars is null)
+		//	{
+		//		return NotFound();
+		//	}
 
-			return Ok(cars);
-		}
+		//	return Ok(cars);
+		//}
 
 		//GET: api/cars/1HGCM82633A123456
 		[HttpGet]
@@ -49,14 +49,35 @@ namespace STOWebApi.Controllers
 		}
 
 		//GET: api/cars/filter?userId=UserId
+		//GET: api/cars?userId=UserId
+		//[HttpGet]
+		//[Route("filter")]
+		//public async Task<ActionResult<IEnumerable<CarModel>>> GetByUserIdAsync([FromQuery] int? userId)
+		//{
+		//	IEnumerable<CarModel> cars = await _carService.GetCarsByUserIdAsync(userId);
+
+		//	if (cars is null)
+		//	{
+		//		return NotFound();
+		//	}
+
+		//	return Ok(cars);
+		//}
+
 		[HttpGet]
-		[Route("filter")]
-		public async Task<ActionResult<IEnumerable<CarModel>>> GetByRollAsync([FromQuery] int userId)
+		public async Task<ActionResult<IEnumerable<CarModel>>> GetByUserIdAsync([FromQuery] int? userId)
 		{
-			IEnumerable<CarModel> cars = await _carService.GetCarsByUserIdAsync(userId);
+			IEnumerable<CarModel> cars = null;
+			if (userId == null)
+			{
+				cars = await _carService.GetAllAsync();
+
+			}
+			else cars = await _carService.GetCarsByUserIdAsync((int)userId);
 
 			if (cars is null)
 			{
+				//return new List<CarModel>();
 				return NotFound();
 			}
 
