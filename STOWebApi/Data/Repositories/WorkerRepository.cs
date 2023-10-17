@@ -47,7 +47,7 @@ namespace STOWebApi.Data.Repositories
 
 		public async Task<IEnumerable<Worker>> GetAllAsync()
 		{
-			IEnumerable<Worker> workers = await _dbContext.Workers.ToListAsync();
+			IEnumerable<Worker> workers = await _dbContext.Workers.OrderByDescending(w => w.Id).ToListAsync();
 
 			return workers;
 		}
@@ -55,6 +55,7 @@ namespace STOWebApi.Data.Repositories
 		public async Task<IEnumerable<Worker>> GetAllWithDetailsAsync()
 		{
 			IEnumerable<Worker> workers = await _dbContext.Workers
+															.OrderByDescending(w => w.Id)
 															.Include(w => w.Master)
 															.ToListAsync();
 
@@ -82,6 +83,7 @@ namespace STOWebApi.Data.Repositories
 		{
 			IEnumerable<Worker> workers = await _dbContext.Workers
 												.Where(w => w.Position == position)
+												.OrderByDescending(w => w.Id)
 												.Include(w => w.Master)
 												.ToListAsync();
 

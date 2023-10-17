@@ -47,7 +47,7 @@ namespace STOWebApi.Data.Repositories
 
 		public async Task<IEnumerable<Order>> GetAllAsync()
 		{
-			IEnumerable<Order> orders = await _dbContext.Orders.ToListAsync();
+			IEnumerable<Order> orders = await _dbContext.Orders.OrderByDescending(o => o.Id).ToListAsync();
 
 			return orders;
 		}
@@ -55,6 +55,7 @@ namespace STOWebApi.Data.Repositories
 		public async Task<IEnumerable<Order>> GetAllWithDetailsAsync()
 		{
 			IEnumerable<Order> orders = await _dbContext.Orders
+															.OrderByDescending(o => o.Id)
 															.Include(o => o.Car)
 															.Include(o => o.User)
 															.Include(o => o.Masters)
@@ -75,6 +76,7 @@ namespace STOWebApi.Data.Repositories
 		{
 			Order? order = await _dbContext.Orders
 												.Where(u => u.Id == id)
+												.OrderByDescending(o => o.Id)
 												.Include(o => o.Car)
 												.Include(o => o.User)
 												.Include(o => o.Masters)
@@ -88,6 +90,7 @@ namespace STOWebApi.Data.Repositories
 		{
 			IEnumerable<Order> orders = await _dbContext.Orders
 												.Where(o => o.StartDate >= start && o.StartDate <= finish)
+												.OrderByDescending(o => o.Id)
 												.Include(o => o.Car)
 												.Include(o => o.User)
 												.Include(o => o.Masters)
@@ -101,6 +104,7 @@ namespace STOWebApi.Data.Repositories
 		{
 			IEnumerable<Order> orders = await _dbContext.Orders
 									.Where(o => o.State == state)
+									.OrderByDescending(o => o.Id)
 									.Include(o => o.Car)
 									.Include(o => o.User)
 									.Include(o => o.Masters)
@@ -114,6 +118,7 @@ namespace STOWebApi.Data.Repositories
 		{
 			IEnumerable<Order> orders = await _dbContext.Orders
 						.Where(o => o.UserId == userId)
+						.OrderByDescending(o => o.Id)
 						.Include(o => o.Car)
 						.Include(o => o.User)
 						.Include(o => o.Masters)
@@ -126,12 +131,13 @@ namespace STOWebApi.Data.Repositories
 		public async Task<IEnumerable<Order>> GetOrdersByVincodeAsync(string vincode)
 		{
 			IEnumerable<Order> orders = await _dbContext.Orders
-			.Where(o => o.CarVincode == vincode)
-			.Include(o => o.Car)
-			.Include(o => o.User)
-			.Include(o => o.Masters)
-			.ThenInclude(m => m.Worker)
-			.ToListAsync();
+																.Where(o => o.CarVincode == vincode)
+																.OrderByDescending(o => o.Id)
+																.Include(o => o.Car)
+																.Include(o => o.User)
+																.Include(o => o.Masters)
+																.ThenInclude(m => m.Worker)
+																.ToListAsync();
 
 			return orders;
 		}

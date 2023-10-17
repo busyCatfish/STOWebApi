@@ -55,6 +55,7 @@ namespace STOWebApi.Data.Repositories
 		public async Task<IEnumerable<User>> GetAllWithDetailsAsync()
 		{
 			IEnumerable<User> users = await _dbContext.Users
+															.OrderByDescending(u => u.Id)
 															.Include(u => u.Orders)
 															.ThenInclude(o => o.Masters)
 															.Include(u => u.Cars)
@@ -79,6 +80,7 @@ namespace STOWebApi.Data.Repositories
 		{
 			User? user = await _dbContext.Users
 												.Where(u => u.Id == id)
+												.OrderByDescending(u => u.Id)
 												.Include(u => u.Cars)
 												.Include(u => u.Orders)
 												.ThenInclude(o => o.Masters)
@@ -96,7 +98,7 @@ namespace STOWebApi.Data.Repositories
 
 		public async Task<IEnumerable<User>> GetUsersByRoleAsync(RoleEnum role)
 		{
-			IEnumerable<User> users = await _dbContext.Users.Where(u => u.Role == role).ToListAsync();
+			IEnumerable<User> users = await _dbContext.Users.Where(u => u.Role == role).OrderByDescending(u => u.Id).ToListAsync();
 
 			return users;
 		}

@@ -47,7 +47,7 @@ namespace STOWebApi.Data.Repositories
 
 		public async Task<IEnumerable<Master>> GetAllAsync()
 		{
-			IEnumerable<Master> masters = await _dbContext.Masters.ToListAsync();
+			IEnumerable<Master> masters = await _dbContext.Masters.OrderByDescending(m => m.Id).ToListAsync();
 
 			return masters;
 		}
@@ -64,6 +64,7 @@ namespace STOWebApi.Data.Repositories
 		public async Task<IEnumerable<Master>> GetAllWithDetailsAsync()
 		{
 			IEnumerable<Master> masters = await _dbContext.Masters
+															.OrderByDescending(m => m.Id)
 															.Include(m => m.Worker)
 															.Include(m => m.Orders)
 															.ThenInclude(o => o.Car)
@@ -94,6 +95,7 @@ namespace STOWebApi.Data.Repositories
 		{
 			Master? master = await _dbContext.Masters
 												.Where(u => u.Id == id)
+												.OrderByDescending(m => m.Id)
 												.Include(m => m.Worker)
 												.Include(m => m.Orders)
 												.ThenInclude(o => o.Car)
@@ -106,6 +108,7 @@ namespace STOWebApi.Data.Repositories
 		{
 			IEnumerable<Master> masters = await _dbContext.Masters
 												.Where(m => m.Type == type)
+												.OrderByDescending(m => m.Id)
 												.ToListAsync();
 
 			return masters;
