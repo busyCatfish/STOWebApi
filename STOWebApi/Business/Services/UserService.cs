@@ -118,6 +118,22 @@ namespace STOWebApi.Business.Services
 			await Object.SaveAsync();
 		}
 
+		public async Task<UserModel?> Authentificate(UserLoginModel userLoginModel)
+		{
+			var currentUser = await Object.UserRepository.GetUserByUserNameAsync(userLoginModel.UserName);
+
+			var userLoginPasHash = this.MakePasswordHash(userLoginModel.Password);
+
+			if (currentUser != null && userLoginPasHash.Equals(currentUser.Password))
+			{
+				UserModel user = Mapper.Map<UserModel>(currentUser);
+
+				return user;
+			}
+
+			return null;
+		}
+
 		private void CheckUserModel(User user)
 		{
 			if (user == null)
@@ -154,6 +170,11 @@ namespace STOWebApi.Business.Services
 			{
 				throw new STOSystemException("Telephone cannot be null or empty");
 			}
+		}
+
+		private string MakePasswordHash(string password)
+		{
+			return password;
 		}
 	}
 }

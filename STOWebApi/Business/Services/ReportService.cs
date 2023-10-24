@@ -21,11 +21,14 @@ namespace STOWebApi.Business.Services
 		{
 			ReportModel reportModel = new ReportModel();
 
-			reportModel.Start = start;
-			reportModel.End = end;
+			reportModel.StartDate = start;
+			reportModel.EndDate = end;
 			var orders = await Object.OrderRepository.GetOrdersByPeriodOfTimeAsync(start, end);
+			reportModel.CountOfOrders = orders.Count();
 			reportModel.Orders = Mapper.Map<IEnumerable<OrderModel>>(orders);
-			reportModel.TotalSum = reportModel.Orders.Sum(o => o.Price);
+			var profit = reportModel.Orders.Sum(o => o.Price);
+			var sumOfPriceOfDetails = reportModel.Orders.Sum(o => o.PriceOfDetails);
+			reportModel.TotalSum = Math.Round(profit - sumOfPriceOfDetails * 0.9m, 2);
 
 			return reportModel;
 		}

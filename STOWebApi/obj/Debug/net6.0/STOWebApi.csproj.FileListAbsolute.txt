@@ -86,3 +86,4 @@ C:\Users\Proton\Desktop\STOWebApi\STOWebApi\obj\Debug\net6.0\refint\STOWebApi.dl
 C:\Users\Proton\Desktop\STOWebApi\STOWebApi\obj\Debug\net6.0\STOWebApi.pdb
 C:\Users\Proton\Desktop\STOWebApi\STOWebApi\obj\Debug\net6.0\STOWebApi.genruntimeconfig.cache
 C:\Users\Proton\Desktop\STOWebApi\STOWebApi\obj\Debug\net6.0\ref\STOWebApi.dll
+C:\Users\Proton\Desktop\STOWebApi\STOWebApi\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

@@ -21,9 +21,9 @@ namespace STOWebApi.Controllers
 
 		//GET: api/reports?startDate=YourStartDate&finisheDate=YourFinisheDate
 		[HttpGet]
-		public async Task<ActionResult<ReportModel>> GetByRollAsync([FromQuery] DateTime start, DateTime end)
+		public async Task<ActionResult<ReportModel>> GetByRollAsync([FromQuery] DateTime startDate, DateTime endDate)
 		{
-			ReportModel report = await _reportService.GenerateReportByPeriodAsync(start, end);
+			ReportModel report = await _reportService.GenerateReportByPeriodAsync(startDate, endDate);
 
 			if (report is null)
 			{

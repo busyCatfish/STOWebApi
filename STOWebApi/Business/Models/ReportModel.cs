@@ -6,8 +6,10 @@
 
 		public IEnumerable<OrderModel> Orders { get; set; }
 
-		public DateTime Start { get; set; }
+		public int CountOfOrders { get; set; }
 
-		public DateTime End { get; set; }
+		public DateTime StartDate { get; set; }
+
+		public DateTime EndDate { get; set; }
 	}
 }
