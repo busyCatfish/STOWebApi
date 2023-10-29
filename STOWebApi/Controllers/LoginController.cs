@@ -24,16 +24,16 @@ namespace STOWebApi.Controllers
 
 		[AllowAnonymous]
 		[HttpPost]
-		[Route("login")]
+		//[Route("login")]
 		public async Task<IActionResult> Login([FromBody] UserLoginModel userLoginModel)
 		{
 			var user = await userService.Authentificate(userLoginModel);
 
 			if (user != null)
 			{
-				var token = this.GenerateToken(user);
+				var accessToken = this.GenerateToken(user);
 
-				return Ok(new { token });
+				return Ok(new UserAuthModel{ AccessToken = accessToken, Username = user.UserName, Role = user.Role});
 			}
 
 			return NotFound("UserName or Password is not correct");

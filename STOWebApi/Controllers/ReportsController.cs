@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using STOWebApi.Business.Interfaces;
 using STOWebApi.Business.Models;
 using STOWebApi.Business.Validation;
@@ -9,6 +10,7 @@ namespace STOWebApi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize(Roles = "Administrator")]
 	public class ReportsController : ControllerBase
 	{
 		private readonly IReportService _reportService;

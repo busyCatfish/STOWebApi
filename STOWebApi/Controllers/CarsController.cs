@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using STOWebApi.Business.Interfaces;
 using STOWebApi.Business.Models;
 using STOWebApi.Business.Validation;
 using STOWebApi.Data.Entity;
+using System.Data;
 using System.Reflection;
 
 namespace STOWebApi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize(Roles = "Administrator,Manager")]
 	public class CarsController : ControllerBase
 	{
 		private readonly ICarService _carService;
@@ -113,6 +116,7 @@ namespace STOWebApi.Controllers
 		// DELETE: api/cars/1HGCM82633A123456
 		[HttpDelete]
 		[Route("{vincode}")]
+		[Authorize(Roles = "Administrator")]
 		public async Task<ActionResult> Delete(string vincode)
 		{
 			await _carService.DeleteByIdAsync(vincode);

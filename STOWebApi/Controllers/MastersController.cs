@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using STOWebApi.Business.Interfaces;
 using STOWebApi.Business.Models;
 using STOWebApi.Business.Validation;
 using STOWebApi.Data.Entity;
+using System.Data;
 using System.Reflection;
 
 namespace STOWebApi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize(Roles = "Administrator,Manager")]
 	public class MastersController : ControllerBase
 	{
 		private readonly IMasterService _masterService;
@@ -110,6 +113,7 @@ namespace STOWebApi.Controllers
 		// DELETE: api/masters/1
 		[HttpDelete]
 		[Route("{id}")]
+		[Authorize(Roles = "Administrator")]
 		public async Task<ActionResult> Delete(int id)
 		{
 			await _masterService.DeleteByIdAsync(id);
