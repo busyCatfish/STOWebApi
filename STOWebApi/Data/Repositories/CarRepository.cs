@@ -2,26 +2,34 @@
 using Microsoft.EntityFrameworkCore;
 using STOWebApi.Data.Entity;
 using STOWebApi.Data.Interfaces;
+using STOWebApi.Data.Validation;
 
 namespace STOWebApi.Data.Repositories
 {
 	public class CarRepository : ICarRepository
 	{
 		private readonly STODbContext _dbContext;
+		private readonly TransactionRepositoty _transactionRepositoty;
 
 		public CarRepository(STODbContext dbContext)
 		{
 			_dbContext = dbContext;
+			_transactionRepositoty = new TransactionRepositoty(dbContext);
 		}
 
 		public async Task AddAsync(Car entity)
+		{
+			await _transactionRepositoty.AddWithTransactionAsync<Car>(AddFunctionAsync, entity);
+		}
+
+		private async Task AddFunctionAsync(Car entity)
 		{
 			if(entity == null)
 			{
 				throw new ArgumentNullException(nameof(entity));
 			}
 
-			if(await _dbContext.Cars.FindAsync(entity.Vincode) != null)
+			if (await _dbContext.Cars.FindAsync(entity.Vincode) != null)
 			{
 				throw new ArgumentException("This element is already exist!");
 			}
@@ -33,6 +41,11 @@ namespace STOWebApi.Data.Repositories
 
 		public async Task DeleteByIdAsync(string vincode)
 		{
+			await _transactionRepositoty.DeleteWithTransactionAsync<string>(DeleteFunctionByIdAsync, vincode);
+		}
+
+		private async Task DeleteFunctionByIdAsync(string vincode)
+		{
 			Car? car = await _dbContext.Cars.FindAsync(vincode);
 			
 			if(car == null)
@@ -40,9 +53,22 @@ namespace STOWebApi.Data.Repositories
 				throw new ArgumentException("This element isn`t exist!");
 			}
 
-			_dbContext.Cars.Remove(car);
+			using (var transaction = _dbContext.Database.BeginTransaction())
+			{
+				try
+				{
+					_dbContext.Cars.Remove(car);
 
-			await _dbContext.SaveChangesAsync();
+					await _dbContext.SaveChangesAsync();
+
+					transaction.Commit();
+				}
+				catch (Exception)
+				{
+					transaction.Rollback();
+					throw new STODataBaseException("Щось пішло не так при видаленні машини.");
+				}
+			}
 		}
 
 		public async Task<IEnumerable<Car>> GetAllAsync()
@@ -93,14 +119,32 @@ namespace STOWebApi.Data.Repositories
 
 		public async Task UpdateAsync(Car entity)
 		{
+			await _transactionRepositoty.UpdateWithTransactionAsync<Car>(UpdateFunctionAsync, entity);
+		}
+
+		private async Task UpdateFunctionAsync(Car entity)
+		{
 			if(entity == null)
 			{
 				throw new ArgumentNullException(nameof(entity));
 			}
 
-			_dbContext.Cars.Update(entity);
+			using (var transaction = _dbContext.Database.BeginTransaction())
+			{
+				try
+				{
+					_dbContext.Cars.Update(entity);
 
-			await _dbContext.SaveChangesAsync();
+					await _dbContext.SaveChangesAsync();
+
+					transaction.Commit();
+				}
+				catch (Exception)
+				{
+					transaction.Rollback();
+					throw new STODataBaseException("Щось пішло не так при оновленні машини.");
+				}
+			}
 		}
 	}
 }

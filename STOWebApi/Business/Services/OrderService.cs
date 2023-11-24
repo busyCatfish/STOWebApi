@@ -178,8 +178,6 @@ namespace STOWebApi.Business.Services
 
 			CheckOrderModel(order);
 
-			await Object.OrderMasterRepository.DeleteByOrderIdAsync(modelId);
-
 			order.Masters = await this.GetMastersByTheirId(model.MastersId);
 
 			await Object.OrderRepository.UpdateAsync(order);

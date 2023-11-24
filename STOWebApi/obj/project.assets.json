@@ -3177,11 +3177,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Proton\\Desktop\\STOWebApi\\STOWebApi\\STOWebApi.csproj",
+      "projectUniqueName": "C:\\Users\\Proton\\Desktop\\STOProject\\STOWebApi\\STOWebApi\\STOWebApi.csproj",
       "projectName": "STOWebApi",
-      "projectPath": "C:\\Users\\Proton\\Desktop\\STOWebApi\\STOWebApi\\STOWebApi.csproj",
+      "projectPath": "C:\\Users\\Proton\\Desktop\\STOProject\\STOWebApi\\STOWebApi\\STOWebApi.csproj",
       "packagesPath": "C:\\Users\\Proton\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Proton\\Desktop\\STOWebApi\\STOWebApi\\obj\\",
+      "outputPath": "C:\\Users\\Proton\\Desktop\\STOProject\\STOWebApi\\STOWebApi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

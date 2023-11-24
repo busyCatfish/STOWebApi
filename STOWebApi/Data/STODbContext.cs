@@ -55,20 +55,10 @@ namespace STOWebApi.Data
 			modelBuilder.Entity<OrderMaster>()
 				.HasKey(om => new { om.MasterId, om.OrderId });
 
-			//modelBuilder.Entity<OrderMaster>()
-			//	.HasForeignKey(om => om.MasterId)
-			//	.HasForeignKey(om => om.MasterId);
-
-			//modelBuilder.Entity<OrderMaster>()
-			//	.HasOne(om => om.Order)
-			//	.WithMany(o => o.Masters)
-			//	.HasForeignKey(om => om.OrderId);
-
 			modelBuilder.Entity<Order>()
 				.HasMany(o => o.Masters)
 				.WithMany(m => m.Orders)
 				.UsingEntity<OrderMaster>();
-				//.UsingEntity(j => j.ToTable("OrdersMasters"));
 
 			base.OnModelCreating(modelBuilder);
 		}

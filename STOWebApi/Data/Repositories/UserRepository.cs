@@ -8,13 +8,20 @@ namespace STOWebApi.Data.Repositories
 	public class UserRepository : IUserRepository
 	{
 		private readonly STODbContext _dbContext;
+		private readonly TransactionRepositoty _transactionRepositoty;
 
 		public UserRepository(STODbContext dbContext)
 		{
 			_dbContext = dbContext;
+			_transactionRepositoty = new TransactionRepositoty(dbContext);
 		}
 
 		public async Task AddAsync(User entity)
+		{
+			await _transactionRepositoty.AddWithTransactionAsync<User>(AddFunctionAsync, entity);
+		}
+
+		private async Task AddFunctionAsync(User entity)
 		{
 			if(entity == null)
 			{
@@ -32,6 +39,11 @@ namespace STOWebApi.Data.Repositories
 		}
 
 		public async Task DeleteByIdAsync(int id)
+		{
+			await _transactionRepositoty.DeleteWithTransactionAsync<int>(DeleteFunctionByIdAsync, id);
+		}
+
+		private async Task DeleteFunctionByIdAsync(int id)
 		{
 			User? user = await _dbContext.Users.FindAsync(id);
 			
@@ -104,6 +116,11 @@ namespace STOWebApi.Data.Repositories
 		}
 
 		public async Task UpdateAsync(User entity)
+		{
+			await _transactionRepositoty.UpdateWithTransactionAsync<User>(UpdateFunctionAsync, entity);
+		}
+
+		private async Task UpdateFunctionAsync(User entity)
 		{
 			if(entity == null)
 			{

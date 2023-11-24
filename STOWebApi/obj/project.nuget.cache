@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "vNqU1pbvXy2yKxDpVRlpsG3KYE606X1IJZOg9k9lhFsbO3y7RrBca23znp7n9iSsHiARkJz+UJhkhoE72A7gsQ==",
+  "dgSpecHash": "fFSRtgyA3dFp3F+Nvc2EYqCCBhHvySMsvbnyT7RF8qVkLro0gmqdrlBMOweG/J49wvzNFqO4SEokItc+a8gxzQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Proton\\Desktop\\STOWebApi\\STOWebApi\\STOWebApi.csproj",
+  "projectFilePath": "C:\\Users\\Proton\\Desktop\\STOProject\\STOWebApi\\STOWebApi\\STOWebApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Proton\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\Proton\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",

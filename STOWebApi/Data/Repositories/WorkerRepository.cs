@@ -8,13 +8,20 @@ namespace STOWebApi.Data.Repositories
 	public class WorkerRepository : IWorkerRepository
 	{
 		private readonly STODbContext _dbContext;
+		private readonly TransactionRepositoty _transactionRepositoty;
 
 		public WorkerRepository(STODbContext dbContext)
 		{
 			_dbContext = dbContext;
+			_transactionRepositoty = new TransactionRepositoty(dbContext);
 		}
 
 		public async Task AddAsync(Worker entity)
+		{
+			await _transactionRepositoty.AddWithTransactionAsync<Worker>(AddFunctionAsync, entity);
+		}
+
+		private async Task AddFunctionAsync(Worker entity)
 		{
 			if(entity == null)
 			{
@@ -32,6 +39,11 @@ namespace STOWebApi.Data.Repositories
 		}
 
 		public async Task DeleteByIdAsync(int id)
+		{
+			await _transactionRepositoty.DeleteWithTransactionAsync<int>(DeleteFunctionByIdAsync, id);
+		}
+
+		private async Task DeleteFunctionByIdAsync(int id)
 		{
 			Worker? worker = await _dbContext.Workers.FindAsync(id);
 			
@@ -91,6 +103,11 @@ namespace STOWebApi.Data.Repositories
 		}
 
 		public async Task UpdateAsync(Worker entity)
+		{
+			await _transactionRepositoty.UpdateWithTransactionAsync<Worker>(UpdateFunctionAsync, entity);
+		}
+
+		private async Task UpdateFunctionAsync(Worker entity)
 		{
 			if(entity == null)
 			{

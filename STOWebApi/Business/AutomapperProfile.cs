@@ -35,11 +35,6 @@ namespace STOWebApi.Business
 				.ReverseMap()
 				.ForMember(u => u.Role, urm => urm.MapFrom(x => StaticTools.GetRoleEnumByRoleString(x.Role)));
 
-			//CreateMap<User, UserRegistrationModel>()
-			//	.ForMember(urm => urm.UserName, u => u.MapFrom(x => x.UserName))
-			//	.ForMember(urm => urm.Password, u => u.MapFrom(x => x.Password))
-			//	.ReverseMap();
-
 			CreateMap<Worker, WorkerModel>()
 				.ForMember(wm => wm.WorkerId, w => w.MapFrom(x => x.Id))
 				.ForMember(wm => wm.Email, w => w.MapFrom(x => x.Email))

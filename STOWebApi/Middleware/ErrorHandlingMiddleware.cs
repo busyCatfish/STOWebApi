@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using STOWebApi.Business.Validation;
+using STOWebApi.Data.Validation;
 
 namespace STOWebApi.Middleware
 {
@@ -21,6 +22,13 @@ namespace STOWebApi.Middleware
 			catch (STOSystemException ex)
 			{
 				_logger.LogError(ex, "STOSystemException occurred.");
+
+				context.Response.StatusCode = 500;
+				await context.Response.WriteAsync(ex.Message);
+			}
+			catch (STODataBaseException ex)
+			{
+				_logger.LogError(ex, "STODataBaseException occurred.");
 
 				context.Response.StatusCode = 500;
 				await context.Response.WriteAsync(ex.Message);

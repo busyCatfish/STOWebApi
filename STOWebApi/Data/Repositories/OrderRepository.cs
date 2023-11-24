@@ -8,13 +8,20 @@ namespace STOWebApi.Data.Repositories
 	public class OrderRepository : IOrderRepository
 	{
 		private readonly STODbContext _dbContext;
+		private readonly TransactionRepositoty _transactionRepositoty;
 
 		public OrderRepository(STODbContext dbContext)
 		{
 			_dbContext = dbContext;
+			_transactionRepositoty = new TransactionRepositoty(dbContext);
 		}
 
 		public async Task AddAsync(Order entity)
+		{
+			await _transactionRepositoty.AddWithTransactionAsync<Order>(AddFunctionAsync, entity);
+		}
+
+		private async Task AddFunctionAsync(Order entity)
 		{
 			if(entity == null)
 			{
@@ -32,6 +39,11 @@ namespace STOWebApi.Data.Repositories
 		}
 
 		public async Task DeleteByIdAsync(int id)
+		{
+			await _transactionRepositoty.DeleteWithTransactionAsync<int>(DeleteFunctionByIdAsync, id);
+		}
+
+		private async Task DeleteFunctionByIdAsync(int id)
 		{
 			Order? order = await _dbContext.Orders.FindAsync(id);
 			
@@ -144,10 +156,17 @@ namespace STOWebApi.Data.Repositories
 
 		public async Task UpdateAsync(Order entity)
 		{
+			await _transactionRepositoty.UpdateWithTransactionAsync<Order>(UpdateFunctionAsync, entity);
+		}
+
+		private async Task UpdateFunctionAsync(Order entity)
+		{
 			if(entity == null)
 			{
 				throw new ArgumentNullException(nameof(entity));
 			}
+
+			await _dbContext.OrdersMasters.Where(om => om.OrderId == entity.Id).ExecuteDeleteAsync();
 
 			_dbContext.Orders.Update(entity);
 

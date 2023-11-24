@@ -2,19 +2,27 @@
 using Microsoft.EntityFrameworkCore;
 using STOWebApi.Data.Entity;
 using STOWebApi.Data.Interfaces;
+using STOWebApi.Data.Validation;
 
 namespace STOWebApi.Data.Repositories
 {
-	public class MasterRepository : IMasterRepository
+	public class MasterRepository : IMasterRepository 
 	{
 		private readonly STODbContext _dbContext;
+		private readonly TransactionRepositoty _transactionRepositoty;
 
 		public MasterRepository(STODbContext dbContext)
 		{
 			_dbContext = dbContext;
+			_transactionRepositoty = new TransactionRepositoty(dbContext);
 		}
 
 		public async Task AddAsync(Master entity)
+		{
+			await _transactionRepositoty.AddWithTransactionAsync<Master>(AddFunctionAsync, entity);
+		}
+
+		private async Task AddFunctionAsync(Master entity)
 		{
 			if (entity == null)
 			{
@@ -32,6 +40,11 @@ namespace STOWebApi.Data.Repositories
 		}
 
 		public async Task DeleteByIdAsync(int id)
+		{
+			await _transactionRepositoty.DeleteWithTransactionAsync<int>(DeleteFunctionByIdAsync, id);
+		}
+
+		private async Task DeleteFunctionByIdAsync(int id)
 		{
 			Master? master = await _dbContext.Masters.FindAsync(id);
 
@@ -115,6 +128,11 @@ namespace STOWebApi.Data.Repositories
 		}
 
 		public async Task UpdateAsync(Master entity)
+		{
+			await _transactionRepositoty.UpdateWithTransactionAsync<Master>(UpdateFunctionAsync, entity);
+		}
+
+		private async Task UpdateFunctionAsync(Master entity)
 		{
 			if (entity == null)
 			{

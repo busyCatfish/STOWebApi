@@ -54,12 +54,12 @@ namespace STOWebApi.Business.Services
 		{
 			var allCars = await Object.CarRepository.GetAllWithDetailsAsync();
 
-			var carsModel = Mapper.Map<IEnumerable<CarModel>>(allCars);
+            var carsModel = Mapper.Map<IEnumerable<CarModel>>(allCars);
 
 			return carsModel;
 		}
 
-		public async Task<CarRegistrationModel> GetByIdAsync(string vincode)
+        public async Task<CarRegistrationModel> GetByIdAsync(string vincode)
 		{
 			if (string.IsNullOrEmpty(vincode))
 			{
